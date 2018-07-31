@@ -10,7 +10,7 @@ from .models import Question
 # Create your tests here.
 
 def create_question(question_text, days):
-    time = timezone.now() - datetime.timedelta(days=days)
+    time = timezone.now() + datetime.timedelta(days=days)
     return Question.objects.create(question_text=question_text, pub_date=time)
 
 
@@ -33,6 +33,7 @@ class QuestionIndexViewTests(TestCase):
     def test_future_question(self):
         create_question(question_text="Future question.", days=30)
         response = self.client.get(reverse('polls:index'))
+        print('--------------{}------------------'.format(response))
         self.assertContains(response, "No polls are available.")
         self.assertQuerysetEqual(response.context['latest_question_list'], [])
 
